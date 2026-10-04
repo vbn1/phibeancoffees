@@ -1,7 +1,7 @@
 # PhiBean Coffees — Project Brief
 
 ## Project overview
-PhiBean Coffees is a mobile-first landing page for traceable, single-origin coffee from farms in the valleys of Mullayanagiri, Seethalayanagiri and Rudragiri, Karnataka, India. It helps specialty roasters, cafés, importers, wholesalers, and other professional buyers explore the coffees and submit sourcing inquiries.
+PhiBean Coffees is a mobile-first landing page for traceable, single-origin coffee from farms in the Mullayanagiri, Seethalayanagiri and Rudragiri ranges, Karnataka, India. It helps specialty roasters, cafés, importers, wholesalers, and other professional buyers explore the coffees and submit sourcing inquiries.
 
 The site guides buyers from origin and available coffees through processing, people and place, and buying options to a focused inquiry; it also includes a conversational sourcing chatbot and search/social metadata. It is built with HTML, locally compiled Tailwind CSS, and vanilla JavaScript.
 
@@ -13,9 +13,9 @@ Create a refined, mobile-first B2B landing page for a specialty coffee producer 
 - Positioning: premium, traceable, minimal, elevated, and farm-direct
 - Visual style: restrained ivory and forest tones, editorial serif headlines, generous whitespace, and minimal ornament
 - Message tone: concise, confident, elegant, and B2B-appropriate
-- Core promise: traceable micro-lots from the high-altitude valleys of Mullayanagiri, Seethalayanagiri, and Rudragiri
+- Core promise: traceable micro-lots from the high-altitude Mullayanagiri, Seethalayanagiri, and Rudragiri ranges
 - Tagline: Crafted by altitude
-- Supporting brand statement: From the valleys of India to your roastery
+- Supporting brand statement: From the hills of India to your roastery
 - Avoid excessive repetition of "Arabica"; establish the coffee context naturally
 
 ## Customer profile
@@ -37,7 +37,7 @@ Create a refined, mobile-first B2B landing page for a specialty coffee producer 
 ## Coffee offering and lot information
 
 ### Origin
-PhiBean coffees come from farms in the valleys of Mullayanagiri, Seethalayanagiri, and Rudragiri in Karnataka, India. The farms sit at **1,400–1,600 metres above sea level** beneath a natural forest canopy. Describe the role of altitude, shade, and microclimate in the coffees' character, density, and complexity without making unsupported claims about a specific lot.
+PhiBean coffees come from farms in the Mullayanagiri, Seethalayanagiri, and Rudragiri ranges in Karnataka, India. The farms sit at **1,400–1,600 metres above sea level** beneath a natural forest canopy. Describe the role of altitude, shade, and microclimate in the coffees' character, density, and complexity without making unsupported claims about a specific lot.
 
 Coffee is processed at the farm, allowing control over processing from cherry to green bean.
 
@@ -151,8 +151,8 @@ It should feel consultative, polished, concise, helpful, and B2B-focused, guidin
 Give each section a distinct purpose and destination. Keep the main sourcing CTA in the header, use the hero to direct buyers to origin or coffee discovery, and avoid repeating generic sourcing CTAs or restating the same lot facts across sections.
 
 ### Lot-to-origin traceability
-- Explain the chain from contributing farm and valley to the specific harvest lot and its buyer-facing details.
-- Identify a farm or valley for a lot only when that attribution is confirmed; otherwise state the broader origin accurately and mark more specific detail as unavailable.
+- Explain the chain from contributing farm and range to the specific harvest lot and its buyer-facing details.
+- Identify a farm or range for a lot only when that attribution is confirmed; otherwise state the broader origin accurately and mark more specific detail as unavailable.
 - Keep variety, process, harvest, lot size, availability, and cup information associated with the relevant lot. Do not imply every attribute is available or verified before it is confirmed.
 - Share scores and tasting notes only when verified for that individual lot.
 - Describe cultivation, harvest, processing, export documentation, moisture readings, or defect screening as lot records or quality checks only when those records are confirmed for the coffee being offered.
@@ -167,7 +167,7 @@ Give each section a distinct purpose and destination. Keep the main sourcing CTA
 - Place published profiles in the `#farmStoryGrid` container in `index.html`. Add one `<article data-farm-story>` per approved farm profile to extend the grid.
 - Keep the grower-registration and estate-visit invitation cards separate from published profiles.
 - Each profile can include the farm or grower name, approved location, grower-approved story, growing practices, varieties, and confirmed processing details. Add a farm image only when supplied and approved.
-- Until profile information is available, describe shared origin facts as applying across PhiBean farms; do not assign an individual farm, grower, practice, or lot to a valley without verification.
+- Until profile information is available, describe shared origin facts as applying across PhiBean farms; do not assign an individual farm, grower, practice, or lot to a range without verification.
 - Obtain permission before publishing a grower’s name, story, or identifying details.
 
 ### Suggested hero copy
@@ -208,7 +208,7 @@ Secondary CTA: **Explore the origin**
 Include a descriptive page title, a meta description focused on traceable green coffee and origin, Open Graph title and description, an Open Graph image, Twitter/X card metadata, canonical URL, semantic headings, and descriptive image alt text.
 
 - Suggested page title: **PhiBean Coffees | Traceable Micro-Lots for Roasters**
-- Suggested positioning: **Traceable micro-lot coffee from the valleys of Mullayanagiri, Seethalayanagiri and Rudragiri, Karnataka. Farm-processed coffees from 1,400–1,600 metres above sea level.**
+- Suggested positioning: **Traceable micro-lot coffee from the Mullayanagiri, Seethalayanagiri and Rudragiri ranges, Karnataka. Farm-processed coffees from 1,400–1,600 metres above sea level.**
 
 ## Deployment checklist
 - Run `npm ci` and `npm run build:css` before deploying the static site

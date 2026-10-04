@@ -118,8 +118,29 @@ form button[type="submit"]:hover {
 }
 
 .hero-banner {
+  position: relative;
   height: clamp(10rem, 42vw, 16rem);
   overflow: hidden;
+}
+
+/* Soft shade at the foot of the photo so the caption stays legible */
+.hero-banner::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 4.5rem;
+  background: linear-gradient(to top, rgba(20, 15, 10, 0.5), transparent);
+  pointer-events: none;
+}
+
+.hero-caption {
+  position: absolute;
+  inset: auto 0 0.75rem 0;
+  z-index: 1;
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
 }
 
 .hero-banner > img {

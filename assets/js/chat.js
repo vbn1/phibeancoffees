@@ -84,7 +84,7 @@ const responses = [
   },
   {
     matches: ['origin', 'mullayanagiri', 'seethalayanagiri', 'rudragiri', 'where', 'traceability'],
-    text: 'PhiBean coffees come from farms in the valleys of Mullayanagiri, Seethalayanagiri, and Rudragiri in Karnataka, India. Coffee is processed at the farm, and lot details can be confirmed for each offering.',
+    text: 'PhiBean coffees come from farms in the Mullayanagiri, Seethalayanagiri, and Rudragiri ranges in Karnataka, India. Coffee is processed at the farm, and lot details can be confirmed for each offering.',
     action: { label: 'Ask about sourcing', opportunity: 'Spot micro-lot order' }
   },
   {
@@ -168,6 +168,9 @@ function askForOpportunity() {
   })));
 }
 
+// Estate visits don't need a coffee volume, so the form hides that field and the chat skips the question.
+const needsVolume = (opportunity) => opportunity !== 'Estate visit';
+
 function selectOpportunity(opportunity) {
   if (!opportunityTypes.some(({ value }) => value === opportunity)) {
     throw new Error(`Unsupported inquiry opportunity: ${opportunity}`);
@@ -186,6 +189,7 @@ function startInquiry(opportunity = '') {
     name: '',
     company: '',
     email: '',
+    phone: '',
     volume: '',
     unit: 'kg',
     notes: ''
@@ -201,21 +205,39 @@ function startInquiry(opportunity = '') {
 
 function askNextQuestion() {
   const isGrower = inquiryDraft.opportunityType === 'Grower registration';
+  const isVisit = inquiryDraft.opportunityType === 'Estate visit';
+  const isSample = inquiryDraft.opportunityType === 'Sample request';
+  const isForward = inquiryDraft.opportunityType === 'Annual forward contract';
   const prompts = {
     company: isGrower ? 'What is the name of your farm or estate?' : 'What is your roastery or company name?',
     email: 'What professional email address should we use to reply?',
+    phone: 'Optional: what phone number can we reach you on? Please include your country code, for example +91 98765 43210. Type “skip” to leave it out.',
     volume: isGrower
       ? 'How much coffee do you have available? Enter a whole number and unit, for example “500 kg” or “2 tonnes”.'
-      : 'What volume do you need? The standard lot size is 30 kg. Enter a whole number and unit, for example “30 kg” or “1 tonne”.',
+      : isSample
+        ? 'What sample size would you like, in grams? For example “250 g”.'
+        : isForward
+          ? 'What annual volume do you expect? Enter a whole number and unit, for example “5 tonnes”.'
+          : 'What volume do you need? The standard lot size is 30 kg. Enter a whole number and unit, for example “30 kg” or “1 tonne”.',
     notes: isGrower
       ? 'Where is your farm, and what coffee varieties and harvest details would you like to share? Type “skip” if you have nothing to add.'
-      : 'Any preferred variety, process, cup profile, sample or delivery requirements, destination, or timing? Type “skip” if you have nothing to add.'
+      : isVisit
+        ? 'What dates and group size are you considering, and is there anything you’d like to see? Type “skip” if you have nothing to add.'
+        : 'Any preferred variety, process, cup profile, sample or delivery requirements, destination, or timing? Type “skip” if you have nothing to add.'
   };
 
   addMessage(prompts[inquiryStep]);
 }
 
-function parseVolume(value) {
+function parseVolume(value, opportunity = '') {
+  if (opportunity === 'Sample request') {
+    // Samples are requested in grams; kilograms are converted.
+    const sample = value.trim().match(/^([1-9]\d*)\s*(g|gm|gms|grams?|kg|kgs|kilograms?)?$/i);
+    if (!sample) return null;
+    const isKg = /^(kg|kgs|kilograms?)$/i.test(sample[2] || '');
+    return { amount: String(isKg ? Number(sample[1]) * 1000 : Number(sample[1])), unit: 'g' };
+  }
+
   const match = value.trim().match(/^([1-9]\d*)\s*(kg|kgs|kilograms?|tonnes?|tons?|t)?$/i);
   if (!match) return null;
 
@@ -228,10 +250,12 @@ function parseVolume(value) {
 
 function showInquiryReview() {
   inquiryStep = 'review';
-  const volumeUnit = inquiryDraft.unit === 'kg' ? 'kg' : 'tonnes';
+  const volumeUnit = { g: 'g', kg: 'kg', tonnes: 'tonnes' }[inquiryDraft.unit] || 'kg';
+  const phoneLine = inquiryDraft.phone ? `\nPhone: ${inquiryDraft.phone}` : '';
   const notesLine = inquiryDraft.notes ? `\nDetails: ${inquiryDraft.notes}` : '';
+  const volumeLine = needsVolume(inquiryDraft.opportunityType) ? `\nVolume: ${inquiryDraft.volume} ${volumeUnit}` : '';
   addMessage(
-    `Please review your inquiry:\nName: ${inquiryDraft.name}\nCompany/Farm: ${inquiryDraft.company}\nEmail: ${inquiryDraft.email}\nOpportunity: ${inquiryDraft.opportunityType}\nVolume: ${inquiryDraft.volume} ${volumeUnit}${notesLine}`,
+    `Please review your inquiry:\nName: ${inquiryDraft.name}\nCompany/Farm: ${inquiryDraft.company}\nEmail: ${inquiryDraft.email}${phoneLine}\nOpportunity: ${inquiryDraft.opportunityType}${volumeLine}${notesLine}`,
     'bot',
     [
       { label: 'Confirm and send inquiry', onClick: submitChatInquiry, primary: true },
@@ -251,7 +275,11 @@ function processInquiryAnswer(value) {
   }
 
   if (inquiryStep === 'name') {
-    inquiryDraft.name = value;
+    if (!value.trim() || /^(skip|none|no)$/i.test(value.trim())) {
+      addMessage('We need your name to continue. What is your name?');
+      return;
+    }
+    inquiryDraft.name = value.trim();
     inquiryStep = 'company';
   } else if (inquiryStep === 'company') {
     inquiryDraft.company = value;
@@ -265,11 +293,28 @@ function processInquiryAnswer(value) {
       return;
     }
     inquiryDraft.email = value;
-    inquiryStep = 'volume';
+    inquiryStep = 'phone';
+  } else if (inquiryStep === 'phone') {
+    const skipPhone = /^(skip|none|no)$/i.test(value.trim());
+    if (!skipPhone) {
+      const phoneField = chatInquiryForm.querySelector('[name="phone"]');
+      phoneField.value = value.trim();
+      if (!phoneField.validity.valid) {
+        phoneField.value = '';
+        addMessage('That phone number doesn’t look valid. Enter it with your country code, for example +91 98765 43210, or type “skip” to leave it out.');
+        return;
+      }
+    }
+    inquiryDraft.phone = skipPhone ? '' : value.trim();
+    inquiryStep = needsVolume(inquiryDraft.opportunityType) ? 'volume' : 'notes';
   } else if (inquiryStep === 'volume') {
-    const volume = parseVolume(value);
+    const volume = parseVolume(value, inquiryDraft.opportunityType);
     if (!volume) {
-      addMessage('Please enter a whole-number volume with kg or tonnes, for example “30 kg”.');
+      addMessage(
+        inquiryDraft.opportunityType === 'Sample request'
+          ? 'Please enter a whole number of grams, for example “250 g”.'
+          : 'Please enter a whole-number volume with kg or tonnes, for example “30 kg”.'
+      );
       return;
     }
     inquiryDraft.volume = volume.amount;
@@ -298,17 +343,19 @@ function submitChatInquiry() {
     name: inquiryDraft.name,
     company: inquiryDraft.company,
     email: inquiryDraft.email,
+    phone: inquiryDraft.phone,
     interest: inquiryDraft.opportunityType,
     volume_requirements: inquiryDraft.volume,
     volume_unit: inquiryDraft.unit,
     notes: inquiryDraft.notes
   };
 
+  chatOpportunityField.value = fields.interest;
+  chatOpportunityField.dispatchEvent(new Event('change', { bubbles: true }));
+
   for (const [name, value] of Object.entries(fields)) {
     chatInquiryForm.querySelector(`[name="${name}"]`).value = value;
   }
-
-  chatOpportunityField.dispatchEvent(new Event('change', { bubbles: true }));
   if (!chatInquiryForm.reportValidity()) {
     document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
     addMessage('Please check the highlighted inquiry form fields before submitting.');
