@@ -61,6 +61,8 @@ const inquiryContexts = {
   'Estate visit': {
     show: [],
     hint: 'Share your preferred dates and group size.',
+    companyLabel: 'Farm or Estate Name',
+    companyPlaceholder: 'The farm or estate you’d like to visit',
     notesLabel: 'Visit details',
     notesPlaceholder: 'Preferred dates, group size, and what you’d like to see.',
     submit: 'Request a visit'
@@ -116,6 +118,16 @@ function startGrowerRegistration() {
   opportunityField.value = 'Grower registration';
   updateInquiryContext();
   document.dispatchEvent(new Event('phibean:grower-registration-started'));
+}
+
+function applyRequestedOpportunity() {
+  const requestedOpportunity = new URLSearchParams(window.location.search).get('opportunity');
+
+  if (requestedOpportunity && Object.prototype.hasOwnProperty.call(inquiryContexts, requestedOpportunity)) {
+    opportunityField.value = requestedOpportunity;
+  }
+
+  updateInquiryContext();
 }
 
 function captureTrafficSource(form) {
@@ -190,13 +202,13 @@ inquiryForm.addEventListener('submit', async (event) => {
 window.addEventListener('pageshow', () => {
   inquiryForm.reset();
   captureTrafficSource(inquiryForm);
-  updateInquiryContext();
+  applyRequestedOpportunity();
   successMessage.classList.add('hidden');
   errorMessage.classList.add('hidden');
 });
 
 opportunityField.addEventListener('change', (event) => {
-  updateInquiryContext();
+  applyRequestedOpportunity();
   if (opportunityField.value === 'Grower registration' && event.isTrusted) {
     document.dispatchEvent(new Event('phibean:grower-registration-started'));
   }

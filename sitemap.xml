@@ -2,10 +2,14 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://vbn1.github.io/phibeancoffees/</loc>
-    <lastmod>2026-10-03</lastmod>
   </url>
   <url>
     <loc>https://vbn1.github.io/phibeancoffees/privacy.html</loc>
-    <lastmod>2026-10-03</lastmod>
+  </url>
+  <url>
+    <loc>https://vbn1.github.io/phibeancoffees/grower.html?slug=rayarakana-estate</loc>
+  </url>
+  <url>
+    <loc>https://vbn1.github.io/phibeancoffees/grower.html?slug=lakshmi-estate</loc>
   </url>
 </urlset>

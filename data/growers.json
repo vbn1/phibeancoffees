@@ -1,0 +1,22 @@
+[
+  {
+    "slug": "rayarakana-estate",
+    "name": "Rayarakana Estate",
+    "tagline": "Employed by Mother Nature.",
+    "location": "Mullayanagiri, Seethalayanagiri and Rudragiri ranges, Karnataka",
+    "story": "This century-old family farm that grows Arabica varieties under forest shade. Perennial streams run through the estate, and a mini hydroelectric unit meets its lighting needs.",
+    "altitude": "1,400–1,500 ft above sea level",
+    "varieties": ["Selection 795", "Selection 9", "Cauvery"],
+    "latitude": 13.393100426416979,
+    "longitude": 75.69674094393113
+  },
+    {
+    "slug": "lakshmi-estate",
+    "name": "Lakshmi Estate",
+    "tagline": "Add the approved tagline",
+    "location": "Add the approved location",
+    "story": "A family-owned farm where every generation has contributed to the growth of the estate.",
+    "altitude": null,
+    "varieties": ["Selection 795", "Selection 9", "Chandragiri"]
+  }
+]

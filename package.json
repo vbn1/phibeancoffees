@@ -1,6 +1,9 @@
 {
   "private": true,
   "scripts": {
+    "build": "npm run build:css",
+    "prebuild:css": "npm run build:seo && node scripts/generate-grower-images.js",
+    "build:seo": "node scripts/generate-sitemap.js",
     "build:css": "tailwindcss -c tailwind.config.js -i assets/css/tailwind.input.css -o assets/css/tailwind.min.css --minify"
   },
   "devDependencies": {

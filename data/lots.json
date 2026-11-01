@@ -1,0 +1,26 @@
+[
+  {
+    "variety": "Cauvery",
+    "process": "Washed",
+    "growerSlug": "rayarakana-estate",
+    "size": "Confirm on request",
+    "availability": "Example only — confirm current availability",
+    "cupDetails": "Shared once cupped"
+  },
+  {
+    "variety": "S795",
+    "process": "Natural",
+    "growerSlug": "lakshmi-estate",
+    "size": "Confirm on request",
+    "availability": "Example only — confirm current availability",
+    "cupDetails": "Shared once cupped"
+  },
+  {
+    "variety": "Selection 9",
+    "process": "Honey",
+    "growerSlug": "rayarakana-estate",
+    "size": "Confirm on request",
+    "availability": "Example only — confirm current availability",
+    "cupDetails": "Shared once cupped"
+  }
+]
